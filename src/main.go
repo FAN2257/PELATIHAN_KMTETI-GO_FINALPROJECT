@@ -3,21 +3,26 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"github.com/FAN2257/PELATIHAN_KMTETI-GO_Backend/src/handler"
+
+	handler "github.com/FAN2257/PELATIHAN_KMTETI-GO_FINALPROJECT/api"
 )
 
 func main() {
-	fmt.Println("Hello, World!")
+	h := http.NewServeMux()
+
 	s := &http.Server{
-		Addr: ":8080",
+		Addr:    ":8080",
+		Handler: h,
 	}
 
-	http.HandleFunc("/", handler.GetProduct)
+	h.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello, world!"))
+	})
+	h.HandleFunc("/api/product", handler.ProductHandler)
 
-	fmt.Println("Server started at port 8080")
+	fmt.Println("HTTP Server running on port 8080")
 	err := s.ListenAndServe()
-
-	if(err != nil){
+	if err != nil {
 		fmt.Println(err.Error())
 	}
 }
