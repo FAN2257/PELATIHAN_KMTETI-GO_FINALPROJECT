@@ -11,14 +11,27 @@ import (
 func ProductHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		data, err := service.GetAllProduct()
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+		action := r.URL.Query().Get("action")
+		switch action {
+		case "displayAll":
+			data, err := service.GetAllProduct()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.Header().Add("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(data)
 			return
+
+		// case "displayDetails":
+		// 	id := r.URL.Query().Get("id")
+		// 	data, err := service.GetProductDetails(id)
+		// 	if err != nil {
+		// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		// 		return
+		// 	}
 		}
-		w.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(data)
-		return
+
 	case "POST":
 		err := service.CreateProduct(r.Body)
 		if err != nil {

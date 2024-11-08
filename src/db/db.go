@@ -23,7 +23,7 @@ func DBConnection() (*DB, error) {
 		return nil, err
 	}
 
-	mdb := client.Database("")
+	mdb := client.Database("book_store")
 
 	return &DB{
 		mdb,
