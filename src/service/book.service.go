@@ -98,9 +98,6 @@ func UpdateBook(id string, req io.Reader) error {
 
 	_, err = coll.UpdateOne(context.TODO(), bson.D{{Key: "_id", Value: objID}}, bson.D{
 		{Key: "$set", Value: bson.D{
-			{Key: "title", Value: bookReq.Title},
-			{Key: "author", Value: bookReq.Author},
-			{Key: "date_release", Value: bookReq.DateRelease},
 			{Key: "stock", Value: bookReq.Stock},
 			{Key: "price", Value: bookReq.Price},
 		}},
