@@ -20,7 +20,14 @@ func main() {
 	})
 	h.HandleFunc("/api/product", handler.ProductHandler)
 
+	h.HandleFunc("/api/book", handler.BookHandler)
+
+	h.HandleFunc("/api/employee", handler.EmployeeHandler)
+
 	fmt.Println("HTTP Server running on port 8080")
+	fmt.Println("link: http://localhost:8080")
+	defer fmt.Println("HTTP Server stopped")
+
 	err := s.ListenAndServe()
 	if err != nil {
 		fmt.Println(err.Error())
