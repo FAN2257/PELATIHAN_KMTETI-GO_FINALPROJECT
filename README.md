@@ -18,3 +18,5 @@
         API ini berfungsi untuk menampilkan seluruh data karyawan yang ada di database, namun hanya bagian `name`, `date_release`, dan `status`.
     2) Post employee
         API ini berfungsi untuk membuat data karyawan baru untuk dimasukkan di database.
+
+Pembuatan Projek ini dibantu oleh Github Copilot
