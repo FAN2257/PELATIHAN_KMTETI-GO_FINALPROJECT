@@ -37,7 +37,7 @@ func GetAllEmployee() (*EmployeeResponse, error) {
 	}
 	defer db.MongoDB.Client().Disconnect(context.TODO())
 
-	coll := db.MongoDB.Collection("Employee")
+	coll := db.MongoDB.Collection("employee")
 	cur, err := coll.Find(context.TODO(), bson.D{})
 	if err != nil {
 		log.Default().Println(err.Error())
@@ -61,8 +61,8 @@ func GetAllEmployee() (*EmployeeResponse, error) {
 }
 
 func CreateEmployee(req io.Reader) error {
-	var prodReq EmployeeRequest
-	err := json.NewDecoder(req).Decode(&prodReq)
+	var empReq EmployeeRequest
+	err := json.NewDecoder(req).Decode(&empReq)
 	if err != nil {
 		return errors.New("bad request")
 	}
@@ -77,11 +77,11 @@ func CreateEmployee(req io.Reader) error {
 	coll := db.MongoDB.Collection("employee")
 	_, err = coll.InsertOne(context.TODO(), model.Employee{
 		ID:            primitive.NewObjectID(),
-		Name:          prodReq.Name,
+		Name:          empReq.Name,
 		NIK:           0,
 		LastEducation: "",
-		JoinDate:      prodReq.JoinDate,
-		Status:        prodReq.Status,
+		JoinDate:      empReq.JoinDate,
+		Status:        empReq.Status,
 	})
 	if err != nil {
 		log.Default().Println(err.Error())

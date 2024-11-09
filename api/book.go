@@ -33,7 +33,7 @@ func BookHandler(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(data)
 			return
 		}
-		
+
 	case "PUT":
 		id := r.URL.Query().Get("id")
 		err := service.UpdateBook(id, r.Body)
@@ -67,5 +67,20 @@ func BookHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode("book created successfully")
 		return
 
+	case "DELETE":
+		id := r.URL.Query().Get("id")
+		err := service.DeleteBookByID(id)
+		if err != nil {
+			if err.Error() == "bad request" {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			http.Error(w, "internal server error", http.StatusInternalServerError)
+			return
+		}
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusCreated)
+		json.NewEncoder(w).Encode("book deleted successfully")
+		return
 	}
 }

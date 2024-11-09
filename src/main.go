@@ -18,7 +18,6 @@ func main() {
 	h.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello, world!"))
 	})
-	h.HandleFunc("/api/product", handler.ProductHandler)
 
 	h.HandleFunc("/api/book", handler.BookHandler)
 
