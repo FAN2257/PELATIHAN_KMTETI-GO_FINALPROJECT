@@ -69,7 +69,7 @@ func BookHandler(w http.ResponseWriter, r *http.Request) {
 
 	case "DELETE":
 		id := r.URL.Query().Get("id")
-		err := service.DeleteBookByID(id)
+		err := service.DeleteBook(id)
 		if err != nil {
 			if err.Error() == "bad request" {
 				http.Error(w, err.Error(), http.StatusBadRequest)

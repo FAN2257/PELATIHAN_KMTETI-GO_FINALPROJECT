@@ -13,23 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Employee struct {
-	Name     string `json:"name"`
-	JoinDate int32  `json:"join_date"`
-	Status   bool   `json:"status"`
-}
-
-type EmployeeResponse struct {
-	Data []*Employee `json:"data"`
-}
-
-type EmployeeRequest struct {
-	Name     string `json:"name"`
-	JoinDate int32  `json:"join_date"`
-	Status   bool   `json:"status"`
-}
-
-func GetAllEmployee() (*EmployeeResponse, error) {
+func GetAllEmployee() (*model.EmployeeResponse, error) {
 	db, err := db.DBConnection()
 	if err != nil {
 		log.Default().Println(err.Error())
@@ -44,24 +28,24 @@ func GetAllEmployee() (*EmployeeResponse, error) {
 		return nil, errors.New("internal server error")
 	}
 
-	var prodList []*Employee
+	var prodList []*model.EmployeeGetAll
 
 	for cur.Next(context.TODO()) {
 		var prod model.Employee
 		cur.Decode(&prod)
-		prodList = append(prodList, &Employee{
+		prodList = append(prodList, &model.EmployeeGetAll{
 			Name:     prod.Name,
 			JoinDate: prod.JoinDate,
 			Status:   prod.Status,
 		})
 	}
-	return &EmployeeResponse{
+	return &model.EmployeeResponse{
 		Data: prodList,
 	}, nil
 }
 
 func CreateEmployee(req io.Reader) error {
-	var empReq EmployeeRequest
+	var empReq model.EmployeeRequest
 	err := json.NewDecoder(req).Decode(&empReq)
 	if err != nil {
 		return errors.New("bad request")
@@ -78,8 +62,8 @@ func CreateEmployee(req io.Reader) error {
 	_, err = coll.InsertOne(context.TODO(), model.Employee{
 		ID:            primitive.NewObjectID(),
 		Name:          empReq.Name,
-		NIK:           0,
-		LastEducation: "",
+		NIK:           empReq.NIK,
+		LastEducation: empReq.LastEducation,
 		JoinDate:      empReq.JoinDate,
 		Status:        empReq.Status,
 	})

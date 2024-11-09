@@ -13,30 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Book struct {
-	Title  string `json:"title"`
-	Author string `json:"author"`
-	Price  int    `json:"price"`
-}
-
-type BookResponse struct {
-	Data []*Book `json:"data"`
-}
-
-type BookID struct {
-	Title  string `json:"title"`
-	Author string `json:"author"`
-	Price  int    `json:"price"`
-	Stock  int    `json:"stock"`
-}
-
-type BookRequest struct {
-	Title  string `json:"title"`
-	Author string `json:"author"`
-	Price  int    `json:"price"`
-}
-
-func GetAllBook() (*BookResponse, error) {
+func GetAllBook() (*model.BookResponse, error) {
 	db, err := db.DBConnection()
 	if err != nil {
 		log.Default().Println(err.Error())
@@ -51,22 +28,23 @@ func GetAllBook() (*BookResponse, error) {
 		return nil, errors.New("internal server error")
 	}
 
-	var bookList []*Book
+	var bookList []*model.BookGetAll
 
 	for cur.Next(context.TODO()) {
 		var book model.Book
 		cur.Decode(&book)
-		bookList = append(bookList, &Book{
-			Title: book.Title,
-			Price: book.Price,
+		bookList = append(bookList, &model.BookGetAll{
+			Title:  book.Title,
+			Author: book.Author,
+			Price:  book.Price,
 		})
 	}
-	return &BookResponse{
+	return &model.BookResponse{
 		Data: bookList,
 	}, nil
 }
 
-func GetBookByID(id string) (*BookID, error) {
+func GetBookByID(id string) (*model.BookID, error) {
 	db, err := db.DBConnection()
 	if err != nil {
 		log.Default().Println(err.Error())
@@ -88,16 +66,17 @@ func GetBookByID(id string) (*BookID, error) {
 		return nil, errors.New("internal server error")
 	}
 
-	return &BookID{
-		Title:  book.Title,
-		Author: book.Author,
-		Price:  book.Price,
-		Stock:  book.Stock,
+	return &model.BookID{
+		Title:       book.Title,
+		Author:      book.Author,
+		DateRelease: book.DateRelease,
+		Price:       book.Price,
+		Stock:       book.Stock,
 	}, nil
 }
 
 func UpdateBook(id string, req io.Reader) error {
-	var bookReq BookRequest
+	var bookReq model.BookRequest
 	err := json.NewDecoder(req).Decode(&bookReq)
 	if err != nil {
 		return errors.New("bad request")
@@ -121,6 +100,8 @@ func UpdateBook(id string, req io.Reader) error {
 		{Key: "$set", Value: bson.D{
 			{Key: "title", Value: bookReq.Title},
 			{Key: "author", Value: bookReq.Author},
+			{Key: "date_release", Value: bookReq.DateRelease},
+			{Key: "stock", Value: bookReq.Stock},
 			{Key: "price", Value: bookReq.Price},
 		}},
 	})
@@ -132,7 +113,7 @@ func UpdateBook(id string, req io.Reader) error {
 }
 
 func CreateBook(req io.Reader) error {
-	var bookReq BookRequest
+	var bookReq model.BookRequest
 	err := json.NewDecoder(req).Decode(&bookReq)
 	if err != nil {
 		return errors.New("bad request")
@@ -147,11 +128,12 @@ func CreateBook(req io.Reader) error {
 
 	coll := db.MongoDB.Collection("book")
 	_, err = coll.InsertOne(context.TODO(), model.Book{
-		ID:     primitive.NewObjectID(),
-		Title:  bookReq.Title,
-		Author: bookReq.Author,
-		Price:  bookReq.Price,
-		Stock:  0,
+		ID:          primitive.NewObjectID(),
+		Title:       bookReq.Title,
+		Author:      bookReq.Author,
+		DateRelease: bookReq.DateRelease,
+		Price:       bookReq.Price,
+		Stock:       bookReq.Stock,
 	})
 	if err != nil {
 		log.Default().Println(err.Error())
@@ -160,7 +142,7 @@ func CreateBook(req io.Reader) error {
 	return nil
 }
 
-func DeleteBookByID(id string) error {
+func DeleteBook(id string) error {
 	db, err := db.DBConnection()
 	if err != nil {
 		log.Default().Println(err.Error())
