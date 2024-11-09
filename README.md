@@ -19,4 +19,7 @@
     2) Post employee
         API ini berfungsi untuk membuat data karyawan baru untuk dimasukkan di database.
 
+
+Info : Untuk `status` employee, `true` jika status kontrak dan `false` jika status tetap.
+
 Pembuatan Projek ini dibantu oleh Github Copilot
