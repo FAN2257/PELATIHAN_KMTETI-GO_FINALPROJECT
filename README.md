@@ -2,9 +2,9 @@
 
 ## Penjelasan API (Database name = `toko_buku`)
 1. Book (`\api\book`) [Database collection = `book`]
-    1. Get `?displayAll`
+    1. Get `?action=displayAll`
         API ini berfungsi untuk memanggil semua data buku yang ada dengan yang ditampilkan hanya `title`, `author`, dan `price`.
-    2. Get `?displayDetails&id={id}`
+    2. Get `?action=displayDetails&id={id}`
         API ini berfungsi untuk melihat informasi secara detail pada salah satu buku yang dipilih sesuai `id`.
     3. Put book `?id={id}`
         API ini berfungsi untuk mengganti value `price` dan `stock` pada buku yang dipilih sesuai `id`.
