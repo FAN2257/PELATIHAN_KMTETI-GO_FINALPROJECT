@@ -23,5 +23,6 @@
 ## Info :
 1. Untuk `status` employee, `"KONTRAK"` jika status kontrak dengan nama    variabel `EmployeeKontrak` dan `"TETAP"` jika status tetap dengan nama variabel `EmployeeTetap` yang dikemas pada variabel string bernama `EmployeeStatus`.
 2. Input untuk memasukkan value `JoinDate` pada model employee, bentuknya adalah `YYYY-MM-DDTHH-MinMin-SSZ` (Nilai T dan Z tetap T dan Z sebagai pemisah tanggal dan jam)
+3. Alasan mengapa `DateRelease` string adalah karena data tersebut bukan berasal dari sistem toko, melainkan dari informasi dari buku itu sendiri. Sehingga lebih baik unutk langsung berbentuk string
 
 Pembuatan Projek ini dibantu oleh **Github CoPilot**.
