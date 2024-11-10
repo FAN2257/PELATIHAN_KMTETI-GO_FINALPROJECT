@@ -37,7 +37,7 @@ type EmployeeRequest struct {
 type EmployeeGetAll struct {
 	Name     string         `json:"name"`
 	JoinDate time.Time      `json:"join_date"`
-	Status   EmployeeStatus `json:"status"` // true = Kontrak, false = Tetap
+	Status   EmployeeStatus `json:"status"`
 }
 
 type EmployeeResponse struct {
