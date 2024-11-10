@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 
@@ -57,6 +58,10 @@ func CreateEmployee(req io.Reader) error {
 		return errors.New("internal server error")
 	}
 	defer db.MongoDB.Client().Disconnect(context.TODO())
+
+	if empReq.Status != model.EmployeeKontrak && empReq.Status != model.EmployeeTetap {
+		return fmt.Errorf("status kerja tidak valid: %s", empReq.Status)
+	}
 
 	coll := db.MongoDB.Collection("employee")
 	_, err = coll.InsertOne(context.TODO(), model.Employee{

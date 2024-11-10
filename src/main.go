@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	handler "github.com/FAN2257/PELATIHAN_KMTETI-GO_FINALPROJECT/api"
+	handler "github.com/FAN2257/PELATIHAN_KMTETI-GO_FINALPROJECT/src/api"
 )
 
 func main() {
